@@ -7,38 +7,75 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import java.io.*;
-
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static javafx.scene.paint.Color.LIGHTBLUE;
-
 public class HelloApplication extends Application {
+
+    ArrayList<Integer> scoreList = new ArrayList<>();
+
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Thingy");
+        stage.setTitle("Project");
 
+        Audio ding = new Audio();
 
         StackPane menu = new StackPane();
-        Circle cen = new Circle(100, 100, 100, LIGHTBLUE);
-
+        Circle cen = new Circle(100, 100, 100, Color.CORNFLOWERBLUE);
+        Text title = new Text("Type Thing");
+        title.setFont(Font.font("Abyssinia SIL", FontWeight.BOLD, FontPosture.REGULAR,20));
+        title.setFill(Color.ANTIQUEWHITE);
         Button firOpt = new Button();
         firOpt.setText("Single Player");
         Button secOpt = new Button();
         secOpt.setText("Multi-Player");
+        Button scorOpt = new Button();
+        scorOpt.setText("Highest Score");
+        Button qOpt = new Button();
+        qOpt.setText("Game Rules");
 
-        menu.getChildren().addAll(cen, firOpt, secOpt);
+        menu.getChildren().addAll(cen, title, firOpt, secOpt, scorOpt, qOpt);
         StackPane.setAlignment(firOpt, Pos.BOTTOM_LEFT);
         StackPane.setAlignment(secOpt, Pos.TOP_LEFT);
+        StackPane.setAlignment(scorOpt, Pos.TOP_RIGHT);
+        StackPane.setAlignment(qOpt, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(firOpt, new Insets(100, 100, 100,100));
         StackPane.setMargin(secOpt, new Insets(100, 100, 100,100));
+        StackPane.setMargin(scorOpt, new Insets(100, 100, 100,100));
+        StackPane.setMargin(qOpt, new Insets(100, 100, 100,100));
+
         Scene menuSc = new Scene(menu, 600, 400);
+
+        StackPane rulePane = new StackPane();
+        Text rules = new Text();
+        rules.setFont(Font.font("Abyssinia SIL", FontWeight.BOLD, FontPosture.REGULAR,16));
+        rules.setText("""
+                1. Type the word exactly how you see it in the box to get a point\s
+
+                2. The time it takes for you to get 10 points will be your score\s
+
+                3. The multi-player button will face 2 people against each other\s
+                \s
+                4. The single-player button will time how fast it takes you to reach 10 points""");
+        Button rret = new Button("Return to Menu");
+        rulePane.getChildren().addAll(rules, rret);
+        StackPane.setAlignment(rules, Pos.TOP_CENTER);
+        StackPane.setAlignment(rret, Pos.CENTER);
+        StackPane.setMargin(rules, new Insets(20,10,10,10));
+        Scene ruleSc = new Scene(rulePane, 600, 600);
 
         StackPane x = new StackPane();
         StackPane x2 = new StackPane();
         StackPane x3 = new StackPane();
+        StackPane x4 = new StackPane();
 
         Player one = new Player();
         Rect rect = new Rect();
@@ -47,13 +84,11 @@ public class HelloApplication extends Application {
         TxtField txtField = new TxtField();
         lbl.setText("Score: ");
 
-
         Player two = new Player();
         Rect rect2 = new Rect();
         Txt text2 = new Txt();
         Lbl lbl2 = new Lbl();
         TxtField txtField2 = new TxtField();
-
 
         Player single = new Player();
         Rect rect3 = new Rect();
@@ -61,13 +96,11 @@ public class HelloApplication extends Application {
         Lbl lbl3 = new Lbl();
         TxtField txtField3 = new TxtField();
 
-
         Button b = new Button("Start Game");
         StackPane starti = new StackPane();
         starti.getChildren().addAll(b);
         StackPane.setAlignment(b, Pos.CENTER);
         Scene startScene = new Scene(starti, 600, 600);
-
 
         Button b1 = new Button("Player 2's turn");
         StackPane starti1 = new StackPane();
@@ -96,6 +129,14 @@ public class HelloApplication extends Application {
         StackPane.setMargin(lbl3.cL(), new Insets(100,100,100,100));
         Scene singlePlayer = new Scene(x3, 600, 600);
 
+        Lbl hSC = new Lbl();
+        Button scorRet = new Button("Return to Menu");
+        x4.getChildren().addAll(hSC.cL(), scorRet);
+        StackPane.setAlignment(hSC.cL(), Pos.CENTER);
+        StackPane.setAlignment(scorRet, Pos.BOTTOM_CENTER);
+        StackPane.setMargin(scorRet, new Insets(100,100,100,100));
+        Scene hScene = new Scene(x4, 600, 600);
+
         Lbl winner = new Lbl();
         Button retur = new Button("Return to Menu");
         StackPane winS = new StackPane();
@@ -123,8 +164,10 @@ public class HelloApplication extends Application {
 
         AtomicInteger score = new AtomicInteger();
         text.setText(wordlist.ranWord());
+        lbl.setText("Score: 0");
         txtField.cTF().setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                ding.playMedia();
                 if (txtField.getText().equals(text.getText())) {
                     score.getAndIncrement();
                     System.out.println(score.get());
@@ -137,6 +180,7 @@ public class HelloApplication extends Application {
                     long endTime = System.currentTimeMillis();
                     long totalTime = (endTime - startTime[0]);
                     one.setScore((int)(totalTime/1000));
+                    scoreList.add((int)(totalTime/1000));
                     System.out.println(one.getScore());
                     score.set(0);
                     stage.setScene(secondScene);
@@ -145,9 +189,11 @@ public class HelloApplication extends Application {
             }
         });
 
+        lbl.setText("Score: 0");
         text2.setText(wordlist.ranWord());
         txtField2.cTF().setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                ding.playMedia();
                 if (txtField2.getText().equals(text2.getText())) {
                     score.getAndIncrement();
                     System.out.println(score.get());
@@ -160,6 +206,7 @@ public class HelloApplication extends Application {
                     long endTime = System.currentTimeMillis();
                     long totalTime = (endTime - startTime[1]);
                     two.setScore((int)(totalTime/1000));
+                    scoreList.add((int)(totalTime/1000));
                     System.out.println(two.getScore());
                     winner.setText(one.returnWinner(one.getScore(), two.getScore()));
                     stage.setScene(resultScreen);
@@ -168,9 +215,11 @@ public class HelloApplication extends Application {
             }
         });
 
+        lbl.setText("Score: 0");
         text3.setText(wordlist.ranWord());
         txtField3.cTF().setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                ding.playMedia();
                 if (txtField3.getText().equals(text3.getText())) {
                     score.getAndIncrement();
                     System.out.println(score.get());
@@ -183,6 +232,7 @@ public class HelloApplication extends Application {
                     long endTime = System.currentTimeMillis();
                     long totalTime = (endTime - startTime[1]);
                     single.setScore((int)(totalTime/1000));
+                    scoreList.add((int)(totalTime/1000));
                     time.setText(single.getScore() + " seconds");
                     stage.setScene(timeSc);
                     stage.show();
@@ -207,6 +257,13 @@ public class HelloApplication extends Application {
             stage.setScene(singlePlayer);
         });
 
+        scorOpt.setOnAction(actionEvent -> {
+            hSC.setText("" + highestScore() + " seconds");
+            stage.setScene(hScene);
+        });
+
+
+        qOpt.setOnAction(actionEvent -> stage.setScene(ruleSc));
 
         retur.setOnAction(actionEvent -> {
             stage.setScene(menuSc);
@@ -218,9 +275,26 @@ public class HelloApplication extends Application {
             score.set(0);
         });
 
+        scorRet.setOnAction(actionEvent -> {
+            stage.setScene(menuSc);
+            score.set(0);
+        });
+
+        rret.setOnAction(actionEvent -> {
+            stage.setScene(menuSc);
+            score.set(0);
+        });
+
+
         stage.setScene(menuSc);
         stage.show();
     }
+
+    public int highestScore() {
+        Collections.sort(scoreList);
+        return scoreList.get(0);
+    }
+
 
     public static void main(String[] args) {
         launch();

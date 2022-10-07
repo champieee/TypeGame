@@ -1,7 +1,10 @@
 package com.example.demo;
 
+import java.util.ArrayList;
+
 public class Player {
     int score;
+
 
     public void setScore(int seconds) {
         score = seconds;
@@ -20,4 +23,7 @@ public class Player {
             return "Draw!";
         }
     }
+
+
+
 }
