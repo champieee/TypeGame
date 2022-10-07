@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Wordlist {
     String[] longerWordArray = new String[100];
-    File file = new File("C:\\Users\\ayush\\Downloads\\five-letter-words.txt");
+    File file = new File("C:\\Users\\ayush\\Downloads\\sgb-words.txt");
     Scanner sc;
 
     {
