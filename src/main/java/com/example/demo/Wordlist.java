@@ -10,15 +10,17 @@ import java.util.Scanner;
 
 public class Wordlist {
     String[] longerWordArray = new String[100];
-    File file = new File("C:\\Users\\ayush\\eclipse-workspace\\TypeGame\\out\\artifacts\\TypeGame_jar\\sgb-words.txt");
     Scanner sc;
 
+    public void setPath(String path) {
+        File file = new File(path);
 
-    {
-        try {
-            sc = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        {
+            try {
+                sc = new Scanner(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -34,8 +36,7 @@ public class Wordlist {
     }
 
     public String ranWord() {
-        String ranWord = longerWordArray[randomNum()];
-        return ranWord;
+        return longerWordArray[randomNum()];
     }
 
 

@@ -156,22 +156,39 @@ public class HelloApplication extends Application {
         StackPane.setMargin(retur1, new Insets(100,100,100,100));
         Scene timeSc = new Scene(tS, 600, 600);
 
+        StackPane pathP = new StackPane();
         Wordlist wordlist = new Wordlist();
-        wordlist.copyArray();
         String ranWord = wordlist.ranWord();
         System.out.println(ranWord);
+        TxtField pathI = new TxtField();
+        Text entP = new Text("Enter path to word list (do not enter quotations!)");
+        entP.setFont(Font.font("Abyssinia SIL", FontWeight.BOLD, FontPosture.REGULAR,16));
+        StackPane.setAlignment(entP, Pos.TOP_CENTER);
+        StackPane.setMargin(entP, new Insets(265,100,100,100));
+        StackPane.setMargin(pathI.cTF(), new Insets(100,100,100,100));
+        pathP.getChildren().addAll(pathI.cTF(), entP);
+        Scene pathSc = new Scene(pathP, 600, 600);
+        pathI.cTF().setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                wordlist.setPath(pathI.getText());
+                wordlist.copyArray();
+                System.out.println(wordlist.ranWord());
+                text.setText(wordlist.ranWord());
+                text2.setText(wordlist.ranWord());
+                text3.setText(wordlist.ranWord());
+                stage.setScene(menuSc);
+            }
+        });
 
         final long[] startTime = new long[2];
 
         AtomicInteger score = new AtomicInteger();
-        text.setText(wordlist.ranWord());
         lbl.setText("Score: 0");
         txtField.cTF().setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 if (txtField.getText().equals(text.getText())) {
                     ding.playMedia();
                     score.getAndIncrement();
-                   // System.out.println(score.get());
                     lbl.setText("Score: " + score);
                     text.setText(wordlist.ranWord());
                     txtField.clearText();
@@ -190,8 +207,7 @@ public class HelloApplication extends Application {
             }
         });
 
-        lbl.setText("Score: 0");
-        text2.setText(wordlist.ranWord());
+        lbl2.setText("Score: 0");
         txtField2.cTF().setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 if (txtField2.getText().equals(text2.getText())) {
@@ -216,8 +232,7 @@ public class HelloApplication extends Application {
             }
         });
 
-        lbl.setText("Score: 0");
-        text3.setText(wordlist.ranWord());
+        lbl3.setText("Score: 0");
         txtField3.cTF().setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 if (txtField3.getText().equals(text3.getText())) {
@@ -286,7 +301,7 @@ public class HelloApplication extends Application {
         });
 
 
-        stage.setScene(menuSc);
+        stage.setScene(pathSc);
         stage.show();
     }
 
