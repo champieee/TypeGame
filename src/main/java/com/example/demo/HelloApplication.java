@@ -65,6 +65,7 @@ public class HelloApplication extends Application {
                 3. The multi-player button will face 2 people against each other\s
                 \s
                 4. The single-player button will time how fast it takes you to reach 10 points""");
+
         Button rret = new Button("Return to Menu");
         rulePane.getChildren().addAll(rules, rret);
         StackPane.setAlignment(rules, Pos.TOP_CENTER);
@@ -167,10 +168,10 @@ public class HelloApplication extends Application {
         lbl.setText("Score: 0");
         txtField.cTF().setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                ding.playMedia();
                 if (txtField.getText().equals(text.getText())) {
+                    ding.playMedia();
                     score.getAndIncrement();
-                    System.out.println(score.get());
+                   // System.out.println(score.get());
                     lbl.setText("Score: " + score);
                     text.setText(wordlist.ranWord());
                     txtField.clearText();
@@ -193,8 +194,8 @@ public class HelloApplication extends Application {
         text2.setText(wordlist.ranWord());
         txtField2.cTF().setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                ding.playMedia();
                 if (txtField2.getText().equals(text2.getText())) {
+                    ding.playMedia();
                     score.getAndIncrement();
                     System.out.println(score.get());
                     lbl2.setText("Score: " + score);
@@ -219,8 +220,8 @@ public class HelloApplication extends Application {
         text3.setText(wordlist.ranWord());
         txtField3.cTF().setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                ding.playMedia();
                 if (txtField3.getText().equals(text3.getText())) {
+                    ding.playMedia();
                     score.getAndIncrement();
                     System.out.println(score.get());
                     lbl3.setText("Score: " + score);
@@ -261,7 +262,6 @@ public class HelloApplication extends Application {
             hSC.setText("" + highestScore() + " seconds");
             stage.setScene(hScene);
         });
-
 
         qOpt.setOnAction(actionEvent -> stage.setScene(ruleSc));
 

@@ -8,7 +8,7 @@ import java.net.URL;
 public class Audio {
 
     public void playMedia() {
-        String mp3 = "BVQNLMC-ding.mp3";
+        String mp3 = "da-ding.mp3";
         URL resource = getClass().getResource(mp3);
         assert resource != null;
         Media media = new Media(resource.toString());
